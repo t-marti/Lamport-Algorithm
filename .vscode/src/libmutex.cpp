@@ -7,13 +7,15 @@
 #include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
-#define N 3
 using namespace std;
-#define EXEC 1000
+// var globais 
+#define N 3
+#define EXEC 1000000
 int choosing [N];
 int ticket [N];
-int contador=0; 
-pthread_mutex_t *mutex;
+int contador=0;
+
+pthread_mutex_t mutex;
 
 
 /*O objetivo é fazer o comportamento de um mutex com as threads
@@ -65,37 +67,39 @@ int max_ticket() {
       
 void lamport_mutex_init()
 {
-        int arg = 0;
         for (int i = 0; i < N; i++) {
             ticket[i] = 0;
             choosing[i] = 0;
         }
-        cout << "Mutex initialized" << endl;  
 }
 
+/*nessa função  inicia o processo de sessão crítica e a thread usada*/
 void *thread_process_mutex_lamport(void *arg){
-
   int thread_id = *((int*) arg);
   for(int i=0; i<EXEC; i++){
     Mutex::lamport_mutex_lock(thread_id);
     contador++;
     Mutex::lamport_mutex_unlock(thread_id);
   }
-
+return 0;
 }
+
 // estrutura padrão c++
 void mutex_init(){
-  pthread_mutex_init(mutex, NULL);
+  pthread_mutex_init(&mutex, NULL);
 }
 
-
-void *thread_process_mutexpthread(){
+void clear(){
+  contador=0;
+}
+void *thread_process_mutexpthread(void *arg){
 
   for(int i=0; i<EXEC; i++){
-    pthread_mutex_lock(mutex);
+    pthread_mutex_lock(&mutex);
     contador++;
-    pthread_mutex_unlock(mutex);
+    pthread_mutex_unlock(&mutex);
   }
+  return 0;
 
 }
 

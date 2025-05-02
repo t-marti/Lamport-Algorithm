@@ -1,8 +1,8 @@
 # Nome do executável 
-TARGET = lamport.o
+TARGET = lamport_algorithm
 
 CXX = g++
-CXXFLAGS = -Wall -std=c++17
+CXXFLAGS = -Wall -std=c++17 -g
 
 # Arquivos-fonte
 SRC = lamport_algorithm.cpp libmutex.cpp
